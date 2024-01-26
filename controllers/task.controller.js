@@ -1,47 +1,59 @@
-const todos = [
-    { id: 1, title: "asdas" },
-    { id: 2, title: "ddddddddddd" },
-]
+const Task = require('../models/TaskModel');
 
-const getAllTasks = (req, res) => {
-    res.status(200).json({ data: todos, status: 'success' });
+const getAllTasks = async (req, res) => {
+    try {
+        const todos = await Task.findAll();
+        res.status(200).json({ data: todos, status: 'success' });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve user.' });
+    }
 }
 
 const getSingleTask = async (req, res) => {
-    const id = req.params.id;
-    if (id > todos.length) {
-        res.status(404).json({ status: 'fail', message: 'not found' });
-    }
-    else {
-        const todo = todos.find((todo) => todo.id === Number(id));
+    try {
+        const id = req.params.id;
+        const todo = await Task.findByPk(id);
         res.status(200).json({ data: todo, status: 'success' });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve user.' });
     }
 }
 
-const createTask = (req, res) => {
-    const todo = req.body;
-    todos.push(todo);
-    res.status(201).json({ data: todo });
+const createTask = async (req, res) => {
+    const { title, status } = req.body;
+    try {
+        const user = await Task.create({ title, status });
+        res.status(200).json({ data: user, status: 'success' });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to create user.' });
+    }
 };
 
-const updateTask = (req, res) => {
-    const id = req.params.id;
-    const todo = todos.find((todo) => todo.id === Number(id));
-    const index = todos.indexOf(todo);
-    const keys = Object.keys(req.body);
-    keys.forEach(key => {
-        todo[key] = req.body[key];
-    });
-    todos[index] = todo;
-    res.status(200).json({ data: todo });
-
+const updateTask = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { title, status } = req.body;
+        const todo = await Task.findByPk(id);
+        const updatedTodo = await todo.update({ title, status });
+        res.status(200).json({ data: updatedTodo, status: 'success' });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve user.' });
+    }
 };
 
-const deleteTask = (req, res) => {
-    const id = req.params.id;
-    const todo = todos.find((todo) => todo.id === Number(id));
-    todos.splice(todos.indexOf(todo), 1);
-    res.status(200).json({ data: todos });
+const deleteTask = async(req, res) => {
+    try {
+        const id = req.params.id;
+        const todo = await Task.findByPk(id);
+        await todo.destroy();
+        res.status(200).json({ data: todo, status: 'success' });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve user.' });
+    }
 };
 
 
