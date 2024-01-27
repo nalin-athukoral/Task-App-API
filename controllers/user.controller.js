@@ -19,7 +19,7 @@ const getSingleUser = async (req, res) => {
     catch (error) {
         res.status(500).json({ message: 'Failed to retrieve user.' });
     }
-}   
+}
 
 const createUser = async (req, res) => {
     const { name, email } = req.body;
@@ -31,7 +31,7 @@ const createUser = async (req, res) => {
         res.status(500).json({ message: 'Failed to create user.' });
     }
 
-};  
+};
 
 const updateUser = async (req, res) => {
     try {
@@ -46,7 +46,7 @@ const updateUser = async (req, res) => {
     }
 };
 
-const deleteUser = async(req, res) => {
+const deleteUser = async (req, res) => {
     try {
         const id = req.params.id;
         const user = await User.findByPk(id);
@@ -56,12 +56,26 @@ const deleteUser = async(req, res) => {
     catch (error) {
         res.status(500).json({ message: 'Failed to retrieve user.' });
     }
-};  
+};
+
+const userWithTask = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const userTask = await User.findByPk(id, { include: 'tasks' });
+        
+        res.status(200).json({ data: userTask, status: 'success' });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve user.' });
+    }
+}
+
 
 module.exports = {
     getAllUsers,
     getSingleUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    userWithTask
 }

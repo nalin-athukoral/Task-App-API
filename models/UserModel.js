@@ -1,7 +1,8 @@
 const db = require('../config/connect');
 const sequelize = require('sequelize');
+const Task = require('./TaskModel');
 
-const User = db.define('user', {
+ User = db.define('user', {
     userId: {
         type: sequelize.INTEGER,
         autoIncrement: true,
@@ -18,4 +19,8 @@ const User = db.define('user', {
     }
 });
 
+
+
+
 module.exports = User;
+

@@ -22,9 +22,9 @@ const getSingleTask = async (req, res) => {
 }
 
 const createTask = async (req, res) => {
-    const { title, status } = req.body;
+    const { title, status, userId } = req.body;
     try {
-        const user = await Task.create({ title, status });
+        const user = await Task.create({ title, status, userId });
         res.status(200).json({ data: user, status: 'success' });
     } catch (error) {
         res.status(500).json({ message: 'Failed to create user.' });

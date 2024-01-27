@@ -1,7 +1,8 @@
 const db = require('../config/connect');
 const sequelize = require('sequelize');
+const User = require('./UserModel');
 
-const Task = db.define('task', {
+Task = db.define('task', {
     taskId: {
         type: sequelize.INTEGER,
         autoIncrement: true,
@@ -17,5 +18,10 @@ const Task = db.define('task', {
         allowNull: false
     }
 });
+
+
+User.hasMany(Task, { as: 'tasks', foreignKey: 'userId' });
+Task.belongsTo(User, { foreignKey: 'userId' });
+
 
 module.exports = Task;
