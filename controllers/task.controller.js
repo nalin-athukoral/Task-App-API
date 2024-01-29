@@ -3,7 +3,7 @@ const Task = require('../models/TaskModel');
 const getAllTasks = async (req, res) => {
     try {
         const todos = await Task.findAll();
-        res.status(200).json({ data: todos, status: 'success' });
+        res.status(200).json(todos);
     }
     catch (error) {
         res.status(500).json({ message: 'Failed to retrieve user.' });
